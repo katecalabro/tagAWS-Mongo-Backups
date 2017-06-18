@@ -18,11 +18,11 @@ mongodump --db=$MONGO_DB --out=$DUMP_OUT --quiet
 
 echo "Compressing backup..."
 
-tar -zcvf $FILE_NAME $DUMP_OUT && rm -fr $DUMP_OUT
+tar -zcvf ./$FILE_NAME $DUMP_OUT && rm -fr $DUMP_OUT
 
 echo "Uploading to S3..."
 
-aws s3api put-object --bucket $S3_BUCKET --key mongo-backups/$FILE_NAME --body $FILE_NAME
+aws s3api put-object --bucket $S3_BUCKET --key mongo-backups/$FILE_NAME --body ./$FILE_NAME
 
 echo "Removing backup file..."
 
