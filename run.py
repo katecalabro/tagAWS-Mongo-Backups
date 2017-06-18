@@ -1,9 +1,21 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Steup AWS Creds
+#
+# aws configure
+# AWS_ACCESS_KEY_ID=AKIAJZCDUY7MTF4G4RWA
+# AWS_SECRET_ACCESS_KEY=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
+# DEFAULT_REGION_NAME=None (just hit enter)
+# DEFAULT_OUTPUT_FORMAT=None (just hit enter)
+
 """
 Script that runs a MongoDB backup job periodically according
 to the interval defined by the INTERVAL_NAME environment variable.
+"""
+
+"""
+python -u run.py > aws-backups.logs &
 """
 
 import time
@@ -16,8 +28,8 @@ import os
 import schedule
 
 BACKUP_SCRIPT_PATH = "/app/backup.sh"
-ENV_BACKUP_INTERVAL = "BACKUP_INTERVAL"
-ENV_BACKUP_TIME = "BACKUP_TIME"
+BACKUP_INTERVAL = 1
+BACKUP_TIME = "2:00"
 TIME_FORMAT = "%H:%M"
 
 def catch_exceptions(job_func):
@@ -40,22 +52,8 @@ def backup_job():
 
 if __name__ == "__main__":
     print("Starting periodic MongoDB backup at {}".format(datetime.datetime.now().isoformat()))
-
-    try:
-        interval_days = int(os.environ.get(ENV_BACKUP_INTERVAL))
-    except:
-        raise ValueError("Undefined or invalid var: {}".format(ENV_BACKUP_INTERVAL))
-
-    try:
-        backup_time = os.environ.get(ENV_BACKUP_TIME)
-        datetime.datetime.strptime(backup_time, TIME_FORMAT)
-    except:
-        raise ValueError("Undefined or invalid var: {}".format(ENV_BACKUP_TIME))
-
-    print("Executing backups every {} day/s at {}".format(interval_days, backup_time))
-
-    schedule.every(interval_days).days.at(backup_time).do(backup_job)
-
+    print("Executing backups every {} day/s at {}".format(BACKUP_INTERVAL, BACKUP_TIME))
+    schedule.every(BACKUP_INTERVAL).days.at(BACKUP_TIME).do(backup_job)
     while True:
         schedule.run_pending()
         time.sleep(1)
