@@ -9,10 +9,10 @@ if [ -n "$1" ]; then
         echo "Unzipping backup tar..."
         tar xvzf backup.tar.gz -C ./restore-backup
         echo "Restoring to linked mongo database..."
-        mongorestore /restore-backup/dump
+        mongorestore ./restore-backup/dump
         echo "Cleaning up folders and tar..."
         rm -rf backup.tar.gz
-        rm -rf /restore-backup
+        rm -rf ./restore-backup
         echo "Mongo Database Restored"
 else
         echo "Please supple file from s3 you want to restore from. (use list.sh to view backups on the s3)"
