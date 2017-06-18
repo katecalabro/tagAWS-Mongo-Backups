@@ -7,7 +7,7 @@ if [ -n "$1" ]; then
         echo "Creating restore-backup folder..."
         mkdir -p restore-backup
         echo "Unzipping backup tar..."
-        tar xvzf backup.tar.gz -C /restore-backup
+        tar xvzf backup.tar.gz -C ./restore-backup
         echo "Restoring to linked mongo database..."
         mongorestore /restore-backup/dump
         echo "Cleaning up folders and tar..."
